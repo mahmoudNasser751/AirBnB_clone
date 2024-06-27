@@ -3,11 +3,11 @@
 import datetime
 import json
 import os
-from models.base_model import BaseModel
+
 
 class FileStorage:
 
-    """class for storing and retrieving date"""
+    """Class for storing and retrieving data"""
     __file_path = "file.json"
     __objects = {}
 
@@ -26,28 +26,22 @@ class FileStorage:
             d = {k: v.to_dict() for k, v in FileStorage.__objects.items()}
             json.dump(d, f)
 
+    def classes(self):
+        """Returns a dictionary of valid classes and their references"""
+        from models.base_model import BaseModel
+
+        classes = {"BaseModel": BaseModel}
+        return classes
+
     def reload(self):
-        """
-        deserializes the JSON file to __objects only if the JSON
-        file exists; otherwise, does nothing
-        """
-        current_classes = {'BaseModel': BaseModel}
-
-        if not os.path.exists(FileStorage.__file_path):
+        """Reloads the stored objects"""
+        if not os.path.isfile(FileStorage.__file_path):
             return
-        
-        with open(FileStorage.__file_path, 'r') as f:
-            deserialized = None
+        with open(FileStorage.__file_path, "r", encoding="utf-8") as f:
+            obj_dict = json.load(f)
+            obj_dict = {k: self.classes()[v["__class__"]](**v)
+                        for k, v in obj_dict.items()}
+            # TODO: should this overwrite or insert?
+            FileStorage.__objects = obj_dict
 
-        try:
-            deserialized = json.load(f)
-        except json.JSONDecodeError:
-            pass
-
-        if deserialized is None:
-            return
-        
-
-        FileStorage.__objects = {
-                k: current_classes[k.split('.')[0]](**v)
-                for k, v in deserialized.items()}
+    
