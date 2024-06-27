@@ -3,6 +3,7 @@
 import datetime
 import json
 import os
+from models.base_model import BaseModel
 
 class FileStorage:
 
@@ -24,3 +25,29 @@ class FileStorage:
         with open(FileStorage.__file_path, "w", encoding="utf-8") as f:
             d = {k: v.to_dict() for k, v in FileStorage.__objects.items()}
             json.dump(d, f)
+
+    def reload(self):
+        """
+        deserializes the JSON file to __objects only if the JSON
+        file exists; otherwise, does nothing
+        """
+        current_classes = {'BaseModel': BaseModel}
+
+        if not os.path.exists(FileStorage.__file_path):
+            return
+        
+        with open(FileStorage.__file_path, 'r') as f:
+            deserialized = None
+
+        try:
+            deserialized = json.load(f)
+        except json.JSONDecodeError:
+            pass
+
+        if deserialized is None:
+            return
+        
+
+        FileStorage.__objects = {
+                k: current_classes[k.split('.')[0]](**v)
+                for k, v in deserialized.items()}
