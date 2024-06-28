@@ -6,7 +6,6 @@ import os
 import sys
 
 
-
 class FileStorage:
 
     """Class for storing and retrieving data"""
