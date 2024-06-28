@@ -9,9 +9,6 @@ class HBNBCommand(cmd.Cmd):
     
     prompt = "(hbnb) "
     
-    
-    
-    
     def do_help(self, arg):
         """To get help on a command, type help <topic>.
         """
@@ -28,5 +25,9 @@ class HBNBCommand(cmd.Cmd):
         """
         return True
     
-if __name__ == "__main__":
+    def emptyline(self):
+        """Do nothing on empty input (just pressing ENTER)"""
+        pass
+    
+if __name__ == '__main__':
     HBNBCommand().cmdloop()
