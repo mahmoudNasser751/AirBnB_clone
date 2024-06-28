@@ -6,9 +6,18 @@ import json
 from models import storage
 
 class HBNBCommand(cmd.Cmd):
-    
+    """The command interpreter.
+
+    This class represents the command interpreter, and the control center
+    of this project. It defines function handlers for all commands inputted
+    in the console and calls the appropriate storage engine APIs to manipulate
+    application data / models.
+
+    It sub-classes Python's `cmd.Cmd` class which provides a simple framework
+    for writing line-oriented command interpreters.
+    """
+
     prompt = "(hbnb) "
-    
     def do_help(self, arg):
         """To get help on a command, type help <topic>.
         """
@@ -24,9 +33,10 @@ class HBNBCommand(cmd.Cmd):
         """Quit command to exit the program.
         """
         return True
-    
+
     def emptyline(self):
-        """Do nothing on empty input (just pressing ENTER)"""
+        """Override default `empty line + return` behaviour.
+        """
         pass
     
 if __name__ == '__main__':
