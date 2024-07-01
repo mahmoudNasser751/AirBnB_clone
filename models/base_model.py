@@ -1,16 +1,10 @@
-#!/usr/bin/env python3
+#!/usr/bin/python3
 """This script is the base model"""
 
 import uuid
 from datetime import datetime
-import sys
-import os
-
-current_path = os.path.dirname(os.path.abspath(__file__))
-project_path = os.path.dirname(current_path)
-sys.path.append(project_path)
-
 from models import storage
+
 
 class BaseModel:
 
@@ -60,4 +54,3 @@ class BaseModel:
         my_dict["created_at"] = my_dict["created_at"].isoformat()
         my_dict["updated_at"] = my_dict["updated_at"].isoformat()
         return my_dict
-    
